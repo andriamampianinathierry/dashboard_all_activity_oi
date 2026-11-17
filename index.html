@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>DASH_ALL_ACTIVITIES_OI</title>
+<title>Temps d'activités</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap">
@@ -290,6 +290,23 @@ table.compact th.rowh{max-width:140px}
 .vav{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;font:700 12px var(--mono);margin-right:12px;vertical-align:middle;color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 45%,var(--surface))}
 .vprog{display:block;min-width:180px;height:8px;background:#d9dde0;border-radius:4px;overflow:hidden}
 .vprog i{display:block;height:100%;background:var(--c);border-radius:4px}
+
+/* ===== INCIDENT ===== */
+#head-incident,#body-incident{--brown:#a63d2f;--brown-text:#a63d2f;--accent:#d9604c;--accent-soft:#fbe4df;--sky-lt:#f6c3b9}
+#head-incident{display:flex;flex-direction:column;gap:16px}
+#head-incident .bar .note{color:#fde9e4}
+#head-incident .bar .seg input:checked + span{color:#5a1a10}
+#body-incident thead th,#body-incident thead th.rowh{background:#a63d2f;color:#fff}
+
+#body-incident .kpi .k-value{white-space:pre-line;line-height:1.2}
+/* ===== Centrage des données dans toutes les cartes et tableaux ===== */
+.wrap table th, .wrap table td, #body-vdc .vtable th, #body-vdc .vtable td, #body-vdc .vtable td.vl, #body-vdc .vtable th.vl, #body-vdc .vbc th, #body-vdc .vbc td, #body-vdc .vbc th.vl, #body-vdc .vbc td.vl, #body-vdc .vtable th.rowh { text-align: center !important; }
+.kpi, .vk { align-items: center; text-align: center; }
+.vbadge { align-self: center; }
+.hrow { text-align: center; }
+.hname, .hval { text-align: center; }
+.vprog { margin-left: auto; margin-right: auto; }
+.card .sub, .card h2 { text-align: left; }
 </style>
 
 <div class="wrap">
@@ -306,11 +323,12 @@ table.compact th.rowh{max-width:140px}
     <button type="button" role="tab" id="tab-rpi" data-view="rpi" aria-selected="false">RPI</button>
     <button type="button" role="tab" id="tab-asp" data-view="asp" aria-selected="false">ASP</button>
     <button type="button" role="tab" id="tab-ncms" data-view="ncms" aria-selected="false">NCMS</button>
+    <button type="button" role="tab" id="tab-incident" data-view="incident" aria-selected="false">INCIDENT</button>
   </nav>
   <div id="head-temps">
   <div class="top">
     <div>
-      <h1>Temps par activité</h1>
+      <h1>Temps d'activités</h1>
       <p id="source">Onglet TEMPS_ACTIVITES</p>
     </div>
     <div class="top-actions">
@@ -345,7 +363,7 @@ table.compact th.rowh{max-width:140px}
   <div id="head-mails" hidden>
   <div class="top">
     <div>
-      <h1>MAILS</h1>
+      <h1>Traitement des mails</h1>
       <p id="msource">Onglet Mails</p>
     </div>
     <div class="top-actions">
@@ -444,8 +462,7 @@ table.compact th.rowh{max-width:140px}
   <div id="head-encaissement" hidden>
   <div class="top">
     <div>
-      <h1>APPELS ENTRANTS
-      </h1>
+      <h1>Encaissement</h1>
       <p id="esource">Onglet Encaissement</p>
     </div>
     <div class="top-actions">
@@ -575,7 +592,7 @@ table.compact th.rowh{max-width:140px}
   <div id="head-rpi" hidden>
   <div class="top">
     <div>
-      <h1>RPI</h1>
+      <h1>RPI · Tickets</h1>
       <p id="rpsource">Onglet RPI Tickets</p>
     </div>
     <div class="top-actions">
@@ -594,7 +611,7 @@ table.compact th.rowh{max-width:140px}
   <div id="head-asp" hidden>
   <div class="top">
     <div>
-      <h1>ASP</h1>
+      <h1>ASP · Tickets</h1>
       <p id="aspsource">Onglet ASP Tickets</p>
     </div>
     <div class="top-actions">
@@ -627,6 +644,25 @@ table.compact th.rowh{max-width:140px}
     <span id="ncmsfilters" style="display:contents"></span>
     <button type="button" class="reset" id="ncmsreset"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Réinitialiser</button>
     <div class="tail"><span id="ncmscount" class="note"></span></div>
+  </section>
+  </div>
+  <div id="head-incident" hidden>
+  <div class="top">
+    <div>
+      <h1>INCIDENT · Tickets</h1>
+      <p id="incsource">Onglet INCIDENT TICKETS</p>
+    </div>
+    <div class="top-actions">
+      <span id="incmsg" class="msg muted"></span>
+      <button type="button" id="increfresh">Actualiser</button>
+      <label class="btn btn-primary" for="inccsvfile">Charger un export CSV</label>
+      <input id="inccsvfile" type="file" accept=".csv,.tsv,text/csv" hidden>
+    </div>
+  </div>
+  <section class="bar" aria-label="Filtres INCIDENT">
+    <span id="incfilters" style="display:contents"></span>
+    <button type="button" class="reset" id="increset"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Réinitialiser</button>
+    <div class="tail"><span id="inccount" class="note"></span></div>
   </section>
   </div>
   </div>
@@ -674,6 +710,10 @@ table.compact th.rowh{max-width:140px}
   <div id="body-ncms" hidden>
     <div id="ncmsout"></div>
     <p class="note" id="ncmsfoot"></p>
+  </div>
+  <div id="body-incident" hidden>
+    <div id="incout"></div>
+    <p class="note" id="incfoot"></p>
   </div>
 </div>
 <div id="tip" role="tooltip"></div>
@@ -3530,10 +3570,198 @@ document.getElementById('ncmscsvfile').addEventListener('change', e => {
 });
 setInterval(() => { if (!document.getElementById('head-ncms').hidden) ncmsLoad(true); }, 60000);
 ncmsRender();
+/* ===================== PAGE INCIDENT (onglet gsheet « INCIDENT TICKETS ») ===================== */
+/* Colonnes : ACTIVITÉ, MOTIFS, NOM D'UTILISATEUR, N° DE LIGNE, ACTION EFFECTUÉE, ETAT DE LA DEMANDE, RÉASSIGNATION SUPPORT_ING,
+   DATE CRÉATION DE L'ACTIVITÉ, DATE DE PRISE EN CHARGE PAR UN CSA N3, DÉBUT DU TRAITEMENT, FIN DU TRAITEMENT, DMT, AGENT. */
+const INCGID = '1581235458';
+const INCURL = gsTab(INCGID);
+const INC = { rows: [], skipped: 0, q: '', sel: {}, opts: {}, tried: false,
+  groups: ['month', 'week', 'day', 'agent', 'act', 'motif', 'etat'],
+  names: { month: 'Mois', week: 'Semaine', day: 'Date', agent: 'Agent', act: 'Activité', motif: 'Motif', etat: 'État de la demande' } };
+function incParse(text) {
+  const t = parseCSV(text.replace(/^﻿/, ''));
+  if (!t.length) throw new Error('Fichier vide.');
+  const H = t[0].map(mnorm);
+  const body = t.slice(1).filter(r => r.some(c => String(c).trim()));
+  if (!body.length) throw new Error('Aucune ligne exploitable dans cet onglet.');
+  const ix = re => H.findIndex(h => re.test(h));
+  const C = { act: ix(/^activite/), motif: ix(/^motif/), etat: ix(/^etat de la demande/), recv: ix(/creation/), start: ix(/^debut/), end: ix(/^fin/), dmt: ix(/^dmt/), agent: ix(/^agent/) };
+  if (C.start < 0 && C.end < 0 && C.recv < 0) throw new Error('Colonnes de date introuvables (Début du traitement, Fin du traitement, Date création de l\'activité) : vérifiez que l\'onglet publié est bien « INCIDENT TICKETS ».');
+  const col = (r, i) => (i >= 0 && r[i] != null ? String(r[i]).trim() : '');
+  const rows = []; let skipped = 0;
+  for (const r of body) {
+    const recv = pDate(col(r, C.recv)), start = pDate(col(r, C.start)), end = pDate(col(r, C.end));
+    const d = start != null ? start : end != null ? end : recv;
+    if (d == null) { skipped++; continue; }
+    let dmt = vDur(col(r, C.dmt));
+    if (dmt == null && start != null && end != null && end >= start) dmt = (end - start) / 1000;
+    rows.push(enrich({ t: d, recv, start, end, dmt, agent: col(r, C.agent) || '(sans agent)', act: col(r, C.act) || '(vide)', motif: col(r, C.motif) || '(vide)', etat: col(r, C.etat) || '(vide)' }));
+  }
+  if (!rows.length) throw new Error('Aucune ligne exploitable dans cet onglet.');
+  rows.skipped = skipped;
+  return rows;
+}
+const incVal = (r, g) => g === 'month' ? r.mk : g === 'week' ? r.wk : g === 'day' ? r.dk : r[g];
+function incBuildOptions() {
+  const months = new Map(), weeks = new Map(), days = new Map(), sets = {};
+  for (const g of ['agent', 'act', 'motif', 'etat']) sets[g] = new Set();
+  for (const r of INC.rows) {
+    if (!months.has(r.mk)) months.set(r.mk, monFmt.format(r._dt));
+    if (!weeks.has(r.wk)) weeks.set(r.wk, { label: 'S' + r.wk.split('-S')[1], tip: weekRange(r._dt) });
+    if (!days.has(r.dk)) days.set(r.dk, { label: pad(r._dt.getUTCDate()) + '/' + pad(r._dt.getUTCMonth() + 1) });
+    for (const g in sets) sets[g].add(r[g]);
+  }
+  const sortK = mp => [...mp.entries()].sort((a, b) => a[0] < b[0] ? -1 : 1);
+  INC.opts.month = sortK(months).map(([k, v]) => ({ k, label: v.charAt(0).toUpperCase() + v.slice(1) }));
+  INC.opts.week = sortK(weeks).map(([k, v]) => ({ k, label: v.label, tip: v.tip }));
+  INC.opts.day = sortK(days).map(([k, v]) => ({ k, label: v.label }));
+  for (const g in sets) INC.opts[g] = [...sets[g]].sort((a, b) => a.localeCompare(b, 'fr')).map(a => ({ k: a, label: a }));
+  INC.sel = {};
+  for (const g of INC.groups) INC.sel[g] = new Set(INC.opts[g].map(o => o.k));
+}
+function incBuildBar() {
+  document.getElementById('incfilters').innerHTML = INC.groups.map(g =>
+    '<div class="bf"><span class="bl">' + esc(INC.names[g]) + '</span><div class="dd" data-incg="' + g + '"><button type="button" class="dd-btn" aria-haspopup="true" aria-expanded="false"><span class="dd-val"></span>' + scChev + '</button>' +
+    '<div class="dd-pop" hidden><div class="dd-head"><button type="button" data-incact="all" data-incg="' + g + '">Tout</button><button type="button" data-incact="none" data-incg="' + g + '">Aucun</button>' +
+    (g === 'agent' ? '<input type="search" id="incagentq" placeholder="Rechercher" aria-label="Rechercher un agent">' : '') + '</div><div class="dd-list" id="incf-' + g + '"></div></div></div></div>').join('');
+  const q = document.getElementById('incagentq');
+  if (q) q.addEventListener('input', e => { INC.q = e.target.value.trim().toLowerCase(); incRenderChips('agent'); });
+  INC.groups.forEach(incRenderChips);
+}
+function incUpdateLabel(g) {
+  const n = INC.sel[g].size, tot = INC.opts[g].length;
+  let t;
+  if (n === tot) t = 'Tous'; else if (n === 0) t = 'Aucun';
+  else if (n === 1) t = INC.opts[g].find(o => INC.sel[g].has(o.k)).label; else t = n + ' sélectionnés';
+  const el = document.querySelector('.dd[data-incg="' + g + '"] .dd-val');
+  if (el) el.textContent = t;
+}
+function incRenderChips(g) {
+  const el = document.getElementById('incf-' + g);
+  if (!el) return;
+  el.innerHTML = INC.opts[g].map(o => {
+    const hide = g === 'agent' && INC.q && !o.label.toLowerCase().includes(INC.q) ? ' hidden' : '';
+    return '<label class="dd-item"' + hide + '><input type="checkbox" data-incg="' + g + '" value="' + esc(o.k) + '"' + (INC.sel[g].has(o.k) ? ' checked' : '') + '><span>' + esc(o.label) + (o.tip ? ' <em>' + esc(o.tip) + '</em>' : '') + '</span></label>';
+  }).join('');
+  incUpdateLabel(g);
+}
+const incFiltered = () => INC.rows.filter(r => INC.groups.every(g => INC.sel[g].has(incVal(r, g))));
+/* Traités = tickets avec une date de fin de traitement · DMT = colonne DMT (à défaut fin − début)
+   DMPC = fin de traitement − date de création de l'activité · Backlog = créé un jour antérieur au jour de début de traitement */
+function incStats(list) {
+  const o = { n: list.length, treated: 0, onTime: 0, backlog: 0, sT: 0, nT: 0, sC: 0, nC: 0 };
+  for (const r of list) {
+    if (r.end != null) o.treated++;
+    if (r.end != null && r.recv != null && r.start != null && Math.floor(r.recv / DAY_MS) === Math.floor(r.start / DAY_MS)) o.onTime++;
+    if (r.dmt != null) { o.sT += r.dmt; o.nT++; }
+    if (r.recv != null && r.end != null && r.end >= r.recv) { o.sC += (r.end - r.recv) / 1000; o.nC++; }
+    if (r.recv != null && r.start != null && Math.floor(r.recv / DAY_MS) < Math.floor(r.start / DAY_MS)) o.backlog++;
+  }
+  o.dmt = o.nT ? o.sT / o.nT : null; o.dmpc = o.nC ? o.sC / o.nC : null; o.rateOn = o.treated ? o.onTime / o.treated : null;
+  return o;
+}
+const INC_COLS = [['Tickets', s => fmtNum(s.n)], ['Traités', s => fmtNum(s.treated)], ['À jour', s => fmtNum(s.onTime)], ['Taux à jour', s => iPct(s.rateOn)], ['Backlog', s => fmtNum(s.backlog)], ['DMT', s => mHMS(s.dmt)], ['DMPC', s => mHMS(s.dmpc)]];
+function incTrans(cols, total, corner) {
+  let h = '<table><thead><tr><th class="rowh">' + corner + '</th>' + cols.map(c => '<th' + (c.tip ? ' title="' + esc(c.tip) + '"' : '') + '>' + esc(c.label) + '</th>').join('') + '<th>Total</th></tr></thead><tbody>';
+  for (const [name, f] of INC_COLS) h += '<tr><th class="rowh">' + name + '</th>' + cols.map(c => '<td>' + f(c.s) + '</td>').join('') + '<td class="tot">' + f(total) + '</td></tr>';
+  return h + '</tbody></table>';
+}
+function incTable(rowHead, rows, total) {
+  let h = '<table class="compact"><thead><tr><th class="rowh">' + esc(rowHead) + '</th>' + INC_COLS.map(c => '<th>' + c[0] + '</th>').join('') + '</tr></thead><tbody>';
+  for (const r of rows) h += '<tr><th class="rowh" title="' + esc(r.label) + '">' + esc(r.label) + '</th>' + INC_COLS.map(c => '<td>' + c[1](r.s) + '</td>').join('') + '</tr>';
+  return h + '<tr><th class="rowh">Total</th>' + INC_COLS.map(c => '<td class="tot">' + c[1](total) + '</td>').join('') + '</tr></tbody></table>';
+}
+const incDays = sec => sec == null ? '–' : (Math.round(sec / 86400 * 10) / 10).toString().replace('.', ',') + ' j';
+Object.assign(FILES, { incsem: 'incident-par-semaine', incag: 'incident-par-agent', incmo: 'incident-par-motif' });
+function incRender() {
+  const out = document.getElementById('incout');
+  const list = INC.rows.length ? incFiltered() : [];
+  document.getElementById('inccount').textContent = fmtNum(list.length) + ' tickets sur ' + fmtNum(INC.rows.length);
+  if (!INC.rows.length) { out.innerHTML = '<div class="card empty">Aucune donnée de l\'onglet INCIDENT TICKETS pour le moment.<br>Cliquez sur « Actualiser » ou chargez un export CSV.</div>'; return; }
+  if (!list.length) { out.innerHTML = '<div class="card empty">Aucun ticket pour cette sélection. Cochez au moins une valeur dans chaque filtre.</div>'; return; }
+  const tot = incStats(list), byWeek = mGroup(list, r => r.wk);
+  const weekCols = INC.opts.week.filter(o => byWeek.has(o.k)).map(o => ({ label: o.label, tip: o.tip, s: incStats(byWeek.get(o.k)) }));
+  const agentRows = [...mGroup(list, r => r.agent).entries()].map(([k, l]) => ({ label: k, s: incStats(l) })).sort((a, b) => b.s.treated - a.s.treated || b.s.n - a.s.n || a.label.localeCompare(b.label, 'fr'));
+  const motifRows = [...mGroup(list, r => r.motif).entries()].map(([k, l]) => ({ label: k, s: incStats(l) })).sort((a, b) => b.s.n - a.s.n || a.label.localeCompare(b.label, 'fr'));
+  const kpis = [
+    ['Nombre traité', fmtNum(tot.treated), 'Sur ' + fmtNum(tot.n) + ' tickets (avec une fin de traitement)'],
+    ['DMT', mHMS(tot.dmt), 'Durée moyenne de traitement'],
+    ['DMPC', mHMS(tot.dmpc) + '\n' + incDays(tot.dmpc), 'De la création à la fin de traitement (hh:mm:ss · en jours)'],
+    ['Traitement à jour', fmtNum(tot.onTime) + '\n' + iPct(tot.rateOn), 'Traités le jour de leur création · taux sur ' + fmtNum(tot.treated) + ' traités'],
+    ['Backlog', fmtNum(tot.backlog) + '\n' + iPct(tot.n ? tot.backlog / tot.n : null), 'des tickets · créés un jour avant le traitement']
+  ];
+  const sub = 'Tickets, traités, backlog, DMT et DMPC (hh:mm:ss)';
+  out.innerHTML =
+    '<div class="kpis">' + kpis.map(k => '<div class="kpi"><span class="k-label">' + esc(k[0]) + '</span><span class="k-value">' + esc(k[1]) + '</span><span class="k-note">' + esc(k[2]) + '</span></div>').join('') + '</div>' +
+    '<div style="display:flex;flex-direction:column;gap:16px;margin-top:16px">' +
+      scCard('incsem', 'Par semaine', sub + ' · semaines ISO', incTrans(weekCols, tot, 'Indicateur / Semaine')) +
+      scCard('incmo', 'Par motif', sub, incTable('Motif', motifRows, tot)) +
+      scCard('incag', 'Par agent', sub, incTable('Agent', agentRows, tot)) +
+    '</div>';
+}
+function incApply(rows, keepFilters) {
+  const prev = {};
+  for (const g of INC.groups) prev[g] = { sel: INC.sel[g], all: !INC.opts[g] || INC.sel[g].size === INC.opts[g].length };
+  INC.rows = rows; INC.skipped = rows.skipped || 0; incBuildOptions();
+  if (keepFilters) for (const g of INC.groups) if (prev[g] && !prev[g].all) INC.sel[g] = new Set(INC.opts[g].map(o => o.k).filter(k => prev[g].sel.has(k)));
+  incBuildBar(); incRender();
+  document.getElementById('incfoot').textContent = 'Traités = tickets avec une date de fin de traitement · DMT = colonne DMT (à défaut fin − début de traitement) · DMPC = fin de traitement − date de création de l\'activité · Backlog = ticket créé un jour antérieur à son jour de début de traitement · À jour = ticket traité (fin renseignée) le jour même de sa création, taux = à jour / traités. Les filtres Mois / Semaine / Date portent sur la date de début de traitement (à défaut fin, puis création). Les lignes sans date valide sont ignorées.';
+}
+async function incLoad(silent) {
+  const msg = document.getElementById('incmsg'), btn = document.getElementById('increfresh');
+  btn.disabled = true; INC.tried = true;
+  if (!silent) { msg.className = 'msg muted'; msg.textContent = 'Actualisation…'; }
+  try {
+    const res = await fetch(INCURL + '&_=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    incApply(incParse(await res.text()), true);
+    const n = new Date(Date.now() + TZ_MS);
+    msg.className = 'msg muted'; msg.textContent = 'Données à jour · ' + pad(n.getUTCHours()) + ':' + pad(n.getUTCMinutes()) + (INC.skipped ? ' · ' + INC.skipped + ' ligne(s) sans date ignorée(s)' : '');
+    document.getElementById('incsource').textContent = 'Onglet INCIDENT TICKETS · Google Sheet en direct';
+  } catch (err) {
+    msg.className = 'msg err';
+    msg.textContent = 'Onglet INCIDENT TICKETS inaccessible (' + (err && err.message ? err.message : 'erreur réseau') + '). Publiez-le en CSV ou chargez un export.';
+    incRender();
+  } finally { btn.disabled = false; }
+}
+/* événements INCIDENT */
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset && t.dataset.incg && t.type === 'checkbox') {
+    if (t.checked) INC.sel[t.dataset.incg].add(t.value); else INC.sel[t.dataset.incg].delete(t.value);
+    incUpdateLabel(t.dataset.incg); incRender();
+  }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('button[data-incact]');
+  if (!b) return;
+  const g = b.dataset.incg;
+  const vis = g === 'agent' && INC.q ? INC.opts.agent.filter(o => o.label.toLowerCase().includes(INC.q)) : INC.opts[g];
+  vis.forEach(o => b.dataset.incact === 'all' ? INC.sel[g].add(o.k) : INC.sel[g].delete(o.k));
+  incRenderChips(g); incRender();
+});
+document.getElementById('increset').addEventListener('click', () => {
+  for (const g of INC.groups) INC.sel[g] = new Set((INC.opts[g] || []).map(o => o.k));
+  INC.q = ''; const q = document.getElementById('incagentq'); if (q) q.value = '';
+  INC.groups.forEach(incRenderChips); incRender();
+});
+document.getElementById('increfresh').addEventListener('click', () => incLoad(false));
+document.getElementById('inccsvfile').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const msg = document.getElementById('incmsg'), rd = new FileReader();
+  rd.onload = () => {
+    try { incApply(incParse(String(rd.result)), false); msg.className = 'msg muted'; msg.textContent = fmtNum(INC.rows.length) + ' tickets chargés'; document.getElementById('incsource').textContent = 'Onglet INCIDENT TICKETS · fichier ' + f.name; }
+    catch (err) { msg.className = 'msg err'; msg.textContent = err.message; }
+  };
+  rd.onerror = () => { msg.className = 'msg err'; msg.textContent = 'Lecture du fichier impossible.'; };
+  rd.readAsText(f); e.target.value = '';
+});
+setInterval(() => { if (!document.getElementById('head-incident').hidden) incLoad(true); }, 60000);
+incRender();
 /* navigation entre les pages */
 function showView(v) {
-  if (v !== 'mails' && v !== 'indexation' && v !== 'facebook' && v !== 'encaissement' && v !== 'vdc' && v !== 'rjd' && v !== 'selfcare' && v !== 'rpi' && v !== 'asp' && v !== 'ncms') v = 'temps';
-  for (const k of ['temps', 'mails', 'indexation', 'facebook', 'encaissement', 'vdc', 'rjd', 'selfcare', 'rpi', 'asp', 'ncms']) {
+  if (v !== 'mails' && v !== 'indexation' && v !== 'facebook' && v !== 'encaissement' && v !== 'vdc' && v !== 'rjd' && v !== 'selfcare' && v !== 'rpi' && v !== 'asp' && v !== 'ncms' && v !== 'incident') v = 'temps';
+  for (const k of ['temps', 'mails', 'indexation', 'facebook', 'encaissement', 'vdc', 'rjd', 'selfcare', 'rpi', 'asp', 'ncms', 'incident']) {
     document.getElementById('head-' + k).hidden = k !== v;
     document.getElementById('body-' + k).hidden = k !== v;
     const tb = document.getElementById('tab-' + k);
@@ -3549,6 +3777,7 @@ function showView(v) {
   if (v === 'rpi' && !RP.tried) rpLoad(true);
   if (v === 'asp' && !ASP.tried) aspLoad(true);
   if (v === 'ncms' && !NCMS.tried) ncmsLoad(true);
+  if (v === 'incident' && !INC.tried) incLoad(true);
 }
 document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { location.hash = b.dataset.view; showView(b.dataset.view); }));
 window.addEventListener('hashchange', () => showView((location.hash || '').replace('#', '')));
